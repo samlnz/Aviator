@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { ToastContainer } from 'react-toastify';
@@ -8,15 +9,19 @@ import './index.scss';
 import App from './app';
 import { Provider } from './context';
 
-createRoot(document.getElementById("root") as HTMLElement).render(
-	<BrowserRouter>
-		<Routes>
-			<Route path="*" element={
-				<Provider>
-					<App />
-					<ToastContainer position="top-center" theme="dark" />
-				</Provider>
-			} />
-		</Routes>
-	</BrowserRouter>
-);
+const container = document.getElementById('root');
+if (container) {
+  const root = createRoot(container);
+  root.render(
+    <BrowserRouter>
+      <Routes>
+        <Route path="*" element={
+          <Provider>
+            <App />
+            <ToastContainer position="top-center" theme="dark" />
+          </Provider>
+        } />
+      </Routes>
+    </BrowserRouter>
+  );
+}
