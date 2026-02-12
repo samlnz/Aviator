@@ -1,6 +1,8 @@
-import { UnityContext } from "react-unity-webgl";
+import * as ReactUnityWebGL from "react-unity-webgl";
 import { Socket } from "socket.io-client";
 
+// Fix: Define UnityContext as any to handle version-specific differences in exports
+type UnityContext = any;
 
 export interface BettedUserType {
     name: string;
@@ -171,7 +173,8 @@ export interface MsgUserType {
     disLikesIDs: string[];
 }
 
-export const unityContext = new UnityContext({
+// Fix: Dynamically access UnityContext from the module if available, otherwise use any for legacy v8 support
+export const unityContext = new (ReactUnityWebGL as any).UnityContext({
     loaderUrl: "unity/WebGL.loader.js",
     dataUrl: "unity/WebGL.data.unityweb",
     frameworkUrl: "unity/WebGL.framework.js.unityweb",

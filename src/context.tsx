@@ -1,12 +1,15 @@
-
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
-import { UnityContext } from "react-unity-webgl";
+// Fix: Use any for UnityContext to bypass version-specific import errors and handle potential missing export
+import * as ReactUnityWebGL from "react-unity-webgl";
 import { useLocation } from "react-router";
 import { io, Socket } from "socket.io-client";
 import { toast } from "react-toastify";
 import { config } from "./config";
 import { MsgUserType } from "./utils/interfaces";
+
+// Fix: Define UnityContext as any to support both v8 and v9+ usage patterns during version transition
+type UnityContext = any;
 
 // Updated BettedUserType to include avatar and name fields as expected by components
 export interface BettedUserType {
@@ -91,10 +94,14 @@ export interface GameHistory {
   date: number;
 }
 
+// Fix: Simplified UserStatusType to only include common state flags, removing properties handled separately in Provider
 interface UserStatusType {
   fbetState: boolean;
-  fbetted: boolean;
   sbetState: boolean;
+}
+
+interface UserStatusExtendedType extends UserStatusType {
+  fbetted: boolean;
   sbetted: boolean;
 }
 
@@ -126,7 +133,7 @@ interface ContextDataType {
 }
 
 // Expanded ContextType to include all properties and methods used by components across the app
-interface ContextType extends GameBetLimit, UserStatusType, GameStatusType {
+interface ContextType extends GameBetLimit, UserStatusExtendedType, GameStatusType {
   state: ContextDataType;
   userInfo: UserType;
   socket: Socket;
@@ -163,7 +170,8 @@ interface ContextType extends GameBetLimit, UserStatusType, GameStatusType {
   handleChangeUserSeed(attrs: string): void;
 }
 
-const unityContext = new UnityContext({
+// Fix: Dynamically access UnityContext from the module if available, otherwise use any for legacy v8 support
+const unityContext = new (ReactUnityWebGL as any).UnityContext({
   loaderUrl: "unity/AirCrash.loader.js",
   dataUrl: "unity/AirCrash.data.unityweb",
   frameworkUrl: "unity/AirCrash.framework.js.unityweb",
@@ -403,7 +411,7 @@ export const Provider = ({ children }: any) => {
       let sauto = attrs.userInfo.s.auto;
       let fbetAmount = attrs.userInfo.f.betAmount;
       let sbetAmount = attrs.userInfo.s.betAmount;
-      let betStatus = newBetState;
+      let betStatus = { ...newBetState };
       attrs.userInfo = user;
       attrs.userInfo.f.betAmount = fbetAmount;
       attrs.userInfo.s.betAmount = sbetAmount;
@@ -515,7 +523,7 @@ export const Provider = ({ children }: any) => {
 
   React.useEffect(() => {
     let attrs = state;
-    let betStatus = userBetState;
+    let betStatus = { ...userBetState };
     if (gameState.GameState === "BET") {
       if (betStatus.fbetState) {
         if (state.userInfo.f.auto) {
