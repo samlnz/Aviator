@@ -1,7 +1,7 @@
-const baseUrl = process.env.REACT_APP_API_URL || window.location.origin;
+const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
 
 export const config = {
-  development: process.env.REACT_APP_DEVELOPMENT === "true",
+  development: false,
   debug: true,
   appKey: "crash-0.1.0",
   api: `${baseUrl}/api`,
