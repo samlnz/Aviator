@@ -124,5 +124,5 @@ app.delete("/api/user/:id", (req, res, next) => {
 })
 
 app.use(function(req, res){
-    res.status(404);
+    res.status(404).json({"error": "Not Found"});
 });
