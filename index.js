@@ -2,21 +2,48 @@ var express = require("express")
 var app = express()
 var db = require("./database.js")
 var md5 = require("md5")
+var path = require("path")
+var http = require("http").Server(app)
+var io = require("socket.io")(http, {
+    cors: {
+        origin: "*",
+    }
+})
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+// Serve static files from the Vite build
+app.use(express.static(path.join(__dirname, "dist")));
+
 var HTTP_PORT = process.env.PORT || 3000
 
-// Start server
-app.listen(HTTP_PORT, () => {
-    console.log("Server running on port %PORT%".replace("%PORT%",HTTP_PORT))
+// Socket.io basic setup to prevent frontend from crashing
+io.on("connection", (socket) => {
+    console.log("A user connected");
+    
+    socket.on("enterRoom", (data) => {
+        console.log("User entered room", data);
+        // Emit some initial state if needed
+        socket.emit("myInfo", {
+            balance: 1000,
+            userName: "Guest",
+            f: { betted: false, auto: false },
+            s: { betted: false, auto: false }
+        });
+        socket.emit("gameState", {
+            currentNum: 1.0,
+            GameState: "BET",
+            time: 10
+        });
+    });
+
+    socket.on("disconnect", () => {
+        console.log("User disconnected");
+    });
 });
 
-app.get("/", (req, res, next) => {
-    res.json({"message":"Ok"})
-});
-
+// API Endpoints
 app.get("/api/users", (req, res, next) => {
     var sql = "select * from user"
     var params = []
@@ -32,95 +59,15 @@ app.get("/api/users", (req, res, next) => {
       });
 });
 
-
-app.get("/api/user/:id", (req, res, next) => {
-    var sql = "select * from user where id = ?"
-    var params = [req.params.id]
-    db.get(sql, params, (err, row) => {
-        if (err) {
-          res.status(400).json({"error":err.message});
-          return;
-        }
-        res.json({
-            "message":"success",
-            "data":row
-        })
-      });
+// Fallback to index.html for SPA
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
-
-app.post("/api/user/", (req, res, next) => {
-    var errors=[]
-    if (!req.body.password){
-        errors.push("No password specified");
-    }
-    if (!req.body.email){
-        errors.push("No email specified");
-    }
-    if (errors.length){
-        res.status(400).json({"error":errors.join(",")});
-        return;
-    }
-    var data = {
-        name: req.body.name,
-        email: req.body.email,
-        password : md5(req.body.password)
-    }
-    var sql ='INSERT INTO user (name, email, password) VALUES (?,?,?)'
-    var params =[data.name, data.email, data.password]
-    db.run(sql, params, function (err, result) {
-        if (err){
-            res.status(400).json({"error": err.message})
-            return;
-        }
-        res.json({
-            "message": "success",
-            "data": data,
-            "id" : this.lastID
-        })
-    });
-})
-
-
-app.patch("/api/user/:id", (req, res, next) => {
-    var data = {
-        name: req.body.name,
-        email: req.body.email,
-        password : req.body.password ? md5(req.body.password) : null
-    }
-    db.run(
-        `UPDATE user set 
-           name = COALESCE(?,name), 
-           email = COALESCE(?,email), 
-           password = COALESCE(?,password) 
-           WHERE id = ?`,
-        [data.name, data.email, data.password, req.params.id],
-        function (err, result) {
-            if (err){
-                res.status(400).json({"error": err.message})
-                return;
-            }
-            res.json({
-                message: "success",
-                data: data,
-                changes: this.changes
-            })
-    });
-})
-
-
-app.delete("/api/user/:id", (req, res, next) => {
-    db.run(
-        'DELETE FROM user WHERE id = ?',
-        req.params.id,
-        function (err, result) {
-            if (err){
-                res.status(400).json({"error": err.message})
-                return;
-            }
-            res.json({"message":"deleted", changes: this.changes})
-    });
-})
+// Start server
+http.listen(HTTP_PORT, () => {
+    console.log("Server running on port " + HTTP_PORT)
+});
 
 app.use(function(req, res){
     res.status(404).json({"error": "Not Found"});
