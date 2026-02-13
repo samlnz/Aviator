@@ -16,7 +16,8 @@
     "jsx": "react-jsx",
     "sourceMap": false,
     "isolatedModules": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "types": ["vite/client"]
   },
   "include": [
     "src"
