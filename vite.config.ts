@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, '.', '');
+    const env = loadEnv(mode, process.cwd(), '');
     return {
       server: {
         port: 3000,
@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
         outDir: 'dist',
       },
       define: {
-        'process.env': {}
+        'process.env': env
       },
       resolve: {
         alias: {
