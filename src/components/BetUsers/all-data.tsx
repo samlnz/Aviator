@@ -1,8 +1,7 @@
-
 import React from "react";
-import Context, { BettedUserType, UserType } from "../../context";
+import Context from "../../context";
 import { displayName } from "../utils";
-import { BetResults } from "../../utils/interfaces";
+import { BetResults, BettedUserType, UserType } from "../../utils/interfaces";
 import { binaryToFloat } from "../utils";
 
 interface AllDataProps {
@@ -84,24 +83,24 @@ const AllData = ({ pre, setPre, allData }: AllDataProps) => {
                 )}
                 <div className="username">{displayName(user.name)}</div>
               </div>
-              <div className="bet">{binaryToFloat(String(user.betAmount)).toFixed(2)}</div>
+              <div className="bet">{binaryToFloat(user.betAmount).toFixed(2)}</div>
               {user.cashouted && (
                 <div className="multiplier-block">
                   <div
-                    className={`bubble font-weight-bold opacity-${100 - 2 * key} ${binaryToFloat(String(user.target)) < 2
+                    className={`bubble font-weight-bold opacity-${100 - 2 * key} ${binaryToFloat(user.target) < 2
                       ? "blue"
-                      : binaryToFloat(String(user.target)) < 10
+                      : binaryToFloat(user.target) < 10
                         ? "purple"
                         : "big"
                       }`}
                   >
-                    {binaryToFloat(String(user.target)).toFixed(2)}x
+                    {binaryToFloat(user.target).toFixed(2)}x
                   </div>
                 </div>
               )}
               <div className="cash-out">
-                {binaryToFloat(String(user.cashOut)) > 0
-                  ? binaryToFloat(String(user.cashOut)).toFixed(2)
+                {binaryToFloat(user.cashOut) > 0
+                  ? binaryToFloat(user.cashOut).toFixed(2)
                   : ""}
               </div>
             </div>

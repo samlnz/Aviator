@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { MoonLoader } from "react-spinners";
+import MoonLoader from "react-spinners/MoonLoader";
 import "./bets.scss";
 import { config } from "../../config";
 
@@ -73,6 +73,7 @@ const TopHistory = () => {
               <MoonLoader
                 color="red"
                 size={35}
+                data-testid="loader"
               />
             </div>
           ) : (

@@ -1,9 +1,8 @@
-
 import React, { useEffect } from "react";
 import axios from "axios";
 import { Oval } from "react-loader-spinner";
 import "./bets.scss";
-import { config } from "../../config";
+import config from "../../config.json";
 import Context from "../../context";
 import { displayName } from "../utils";
 
@@ -23,7 +22,12 @@ const TopHistory = () => {
   const callDate = async (date: string) => {
     try {
       setLoadingEffect(true);
-      let response = await axios.get(`${config.api}/get-${date}-history`);
+      let response = await axios.get(
+        `${process.env.REACT_APP_DEVELOPMENT === "true"
+          ? config.development_api
+          : config.production_api
+        }/get-${date}-history`
+      );
       if (response?.data?.status) {
         setHistory(response.data.data);
         setTimeout(() => {
@@ -135,6 +139,9 @@ const TopHistory = () => {
                         >
                           {Number(item.cashoutAt).toFixed(2)}x
                         </span>
+                        {/* <span className="amount cashout">
+                          {item.cashoutAt.toFixed(2)}x
+                        </span> */}
                       </div>
                       <div className="flex">
                         <div className="">

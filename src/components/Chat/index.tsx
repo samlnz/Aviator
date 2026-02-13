@@ -1,4 +1,3 @@
-
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { HiOutlineFaceSmile, HiOutlineGif } from "react-icons/hi2";
 import data from "@emoji-mart/data";
@@ -8,7 +7,7 @@ import axios from "axios";
 
 import Context from "../../context";
 import "./chat.scss";
-import { config } from "../../config";
+import config from "../../config.json";
 import { displayName } from "../utils";
 
 export default function PerfectLiveChat() {
@@ -72,7 +71,12 @@ export default function PerfectLiveChat() {
   };
 
   const getAllChats = async (flag: boolean) => {
-    let response: any = await axios.post(`${config.api}/get-all-chat`);
+    let response: any = await axios.post(
+      `${process.env.REACT_APP_DEVELOPMENT === "true"
+        ? config.development_api
+        : config.production_api
+      }/get-all-chat`
+    );
     setMsgData(response?.data?.data || []);
     if (flag === false) {
       setMsgReceived(!msgReceived);
@@ -81,7 +85,10 @@ export default function PerfectLiveChat() {
 
   const handleLikeChat = async (chatItem: any) => {
     let response = await axios.post(
-      `${config.api}/like-chat`,
+      `${process.env.REACT_APP_DEVELOPMENT === "true"
+        ? config.development_api
+        : config.production_api
+      }/like-chat`,
       {
         chatID: chatItem._id,
         userId: userInfo.userId,

@@ -1,9 +1,9 @@
-
 import React, { useEffect } from "react";
 import AllData from "./all-data";
 import MyBets from "./my-bets";
 import TopHistory from "./top-history";
-import Context, { BettedUserType, UserType } from "../../context";
+import Context from "../../context";
+import { BettedUserType, UserType } from "../../utils/interfaces";
 
 export default function BetsUsers() {
   const { previousHand, bettedUsers, getMyBets } = React.useContext(Context);
