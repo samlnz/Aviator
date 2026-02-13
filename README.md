@@ -1,25 +1,22 @@
-# Node SQLite API
+# Aviator Game Deployment
 
-A simple REST API using Node.js, Express, and SQLite.
+This project contains a Node.js backend and a React (Vite) frontend.
 
 ## Deployment on Railway
 
-This project is ready for deployment on [Railway](https://railway.app/).
+1. Connect your GitHub repository to Railway.
+2. Railway will use the `Procfile` to build the frontend (`npm run build`) and start the backend (`npm start`).
+3. The backend serves the built frontend from the `dist` directory.
 
-1.  Fork or push this repository to GitHub.
-2.  Create a new project on Railway.
-3.  Select "Deploy from GitHub repo".
-4.  Railway will automatically detect the Node.js application and deploy it.
+## Features
 
-**Note:** The SQLite database is stored in a file (`db.sqlite`). On Railway's ephemeral file system, this file will be reset every time the app redeploys. If you need persistent data, consider using a Railway Volume or a managed PostgreSQL/MySQL database.
+- **Express Backend**: Handles API and Socket.io.
+- **SQLite Database**: Stores user data (stored in `db.sqlite`).
+- **React Frontend**: Built with Vite, Tailwind CSS, and Unity WebGL.
+- **Socket.io**: Real-time game updates.
 
-## API Endpoints
+## Local Development
 
-*   `GET /`: Health check.
-*   `GET /api/users`: List all users.
-*   `GET /api/user/:id`: Get a user by ID.
-*   `POST /api/user/`: Create a new user.
-    *   Body: `name`, `email`, `password`
-*   `PATCH /api/user/:id`: Update a user.
-    *   Body: `name`, `email`, `password` (optional)
-*   `DELETE /api/user/:id`: Delete a user.
+1. Install dependencies: `npm install`
+2. Run backend: `npm start`
+3. Run frontend: `npm run dev`
