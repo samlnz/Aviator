@@ -1,100 +1,25 @@
-# Aviator Crash Game ✈️
+# Node SQLite API
 
-**Aviator Crash Game** is an exciting and dynamic multiplayer betting game where players test their luck and timing to win big! With a sleek, responsive interface and real-time gameplay powered by cutting-edge technologies, this game offers an engaging experience for users.
+A simple REST API using Node.js, Express, and SQLite.
 
-## 📩 Contact Me on Telegram
+## Deployment on Railway
 
-For inquiries, collaborations, or support, feel free to reach out:
+This project is ready for deployment on [Railway](https://railway.app/).
 
-[![Telegram Contact](https://img.shields.io/badge/Telegram-Contact%20Me-blue?logo=telegram&style=for-the-badge)](https://t.me/cashblaze129)
+1.  Fork or push this repository to GitHub.
+2.  Create a new project on Railway.
+3.  Select "Deploy from GitHub repo".
+4.  Railway will automatically detect the Node.js application and deploy it.
 
-## 🌟 Features
+**Note:** The SQLite database is stored in a file (`db.sqlite`). On Railway's ephemeral file system, this file will be reset every time the app redeploys. If you need persistent data, consider using a Railway Volume or a managed PostgreSQL/MySQL database.
 
-### 🎮 Game Mechanics
+## API Endpoints
 
-- **Place Bets**: Choose your bet amount and join the game.
-- **Real-Time Multiplier**: Watch the multiplier increase as the plane takes off.
-- **Cash Out**: Withdraw your winnings before the plane crashes.
-- **Unpredictable Crashes**: Adds excitement and keeps players on edge.
-
-### 📈 Core Highlights
-
-- **Real-Time Updates**: Powered by WebSocket for seamless gameplay.
-- **Provably Fair System**: Transparent and verifiable fairness for every round.
-- **User-Friendly UI**: Designed with Tailwind CSS for a smooth, responsive experience.
-- **Leaderboards**: Track top players and compare performances.
-
-### 🔒 Security & Transparency
-
-- Secure login and gameplay.
-- Provably fair crash algorithm ensures trustworthiness.
-
-## 🛠️ Tech Stack
-
-### Frontend
-
-- **React.js**: For building a dynamic and responsive UI.
-- **TypeScript:** Ensures robust and scalable code.
-- **Tailwind CSS**: Provides a sleek and modern design.
-- **Socket.IO**: Enables real-time communication between players and the server.
-
-### Backend
-
-- **Node.js**: High-performance server-side logic.
-- **TypeScript**: For type safety and maintainability.
-- **Socket.IO**: Real-time communication.
-- **MongoDB**: Efficient database for managing user data and game states.
-
-## 📂 Project Structure
-
-```
-aviator-crash-game/
-├── aviator-front/
-│   ├── src/
-│   │   ├── @types/
-│   │   ├── components/
-│   │   ├── assets/
-│   │   ├── utils/
-├── aviator-back/
-│   ├── src/
-│   │   ├── controllers/
-│   │   ├── models/
-│   │   ├── routes/
-│   │   ├── services/
-│   │   └── utils/
-```
-
----
-
-## ⚙️ Setup Instructions
-
-### Frontend
-
-1. Navigate to the aviator-front directory:
-
-```
-cd aviator-front
-```
-
-2. Install dependencies
-
-```
-yarn install
-```
-
-3. Start the development server:
-
-```
-npm run dev
-```
-
-## 🎉 How to Play
-
-- Sign up or log in to your account.
-- Place your bet and wait for the round to begin.
-- Watch the multiplier increase and decide when to cash out.
-- Win big if you cash out before the crash!
-
-## 📜 Provably Fair
-
-Each game round is provably fair, ensuring that the outcome is random and cannot be tampered with.
+*   `GET /`: Health check.
+*   `GET /api/users`: List all users.
+*   `GET /api/user/:id`: Get a user by ID.
+*   `POST /api/user/`: Create a new user.
+    *   Body: `name`, `email`, `password`
+*   `PATCH /api/user/:id`: Update a user.
+    *   Body: `name`, `email`, `password` (optional)
+*   `DELETE /api/user/:id`: Delete a user.
