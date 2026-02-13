@@ -1,3 +1,4 @@
+require('dotenv').config();
 var express = require("express")
 var app = express()
 var db = require("./database.js")
@@ -18,13 +19,12 @@ app.use(express.static(path.join(__dirname, "dist")));
 
 var HTTP_PORT = process.env.PORT || 3000
 
-// Socket.io basic setup to prevent frontend from crashing
+// Socket.io basic setup
 io.on("connection", (socket) => {
-    console.log("A user connected");
+    console.log("A user connected: " + socket.id);
     
     socket.on("enterRoom", (data) => {
         console.log("User entered room", data);
-        // Emit some initial state if needed
         socket.emit("myInfo", {
             balance: 1000,
             userName: "Guest",
@@ -39,7 +39,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on("disconnect", () => {
-        console.log("User disconnected");
+        console.log("User disconnected: " + socket.id);
     });
 });
 
@@ -67,8 +67,4 @@ app.get("*", (req, res) => {
 // Start server
 http.listen(HTTP_PORT, () => {
     console.log("Server running on port " + HTTP_PORT)
-});
-
-app.use(function(req, res){
-    res.status(404).json({"error": "Not Found"});
 });
