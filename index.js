@@ -3,9 +3,8 @@ var app = express()
 var db = require("./database.js")
 var md5 = require("md5")
 
-var bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 var HTTP_PORT = process.env.PORT || 3000
 
@@ -98,7 +97,7 @@ app.patch("/api/user/:id", (req, res, next) => {
         [data.name, data.email, data.password, req.params.id],
         function (err, result) {
             if (err){
-                res.status(400).json({"error": res.message})
+                res.status(400).json({"error": err.message})
                 return;
             }
             res.json({
@@ -116,7 +115,7 @@ app.delete("/api/user/:id", (req, res, next) => {
         req.params.id,
         function (err, result) {
             if (err){
-                res.status(400).json({"error": res.message})
+                res.status(400).json({"error": err.message})
                 return;
             }
             res.json({"message":"deleted", changes: this.changes})
